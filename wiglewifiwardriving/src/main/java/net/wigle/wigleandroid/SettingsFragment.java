@@ -542,8 +542,6 @@ public final class SettingsFragment extends Fragment implements DialogListener {
             SettingsUtil.doScanSpinner(R.id.gps_spinner, PreferenceKeys.GPS_SCAN_PERIOD,
                     MainActivity.LOCATION_UPDATE_INTERVAL, getString(R.string.setting_tie_wifi), view, c);
 
-            SettingsUtil.doSpinner(R.id.edit_mapbox_api_key, view, PreferenceKeys.PREF_MAPBOX_API_KEY, "", new String[]{}, new String[]{}, c); // Placeholder for consistency
-
             final String[] mapThemes = new String[]{"default", "mapbox_streets", "mapbox_sat", "mapbox_dark"};
             final String[] mapThemeNames = new String[]{getString(R.string.map_theme_default), getString(R.string.map_theme_mapbox_streets),
                     getString(R.string.map_theme_mapbox_sat), getString(R.string.map_theme_mapbox_dark)};
