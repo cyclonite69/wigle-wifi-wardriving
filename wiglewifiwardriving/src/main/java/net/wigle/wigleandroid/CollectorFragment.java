@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -36,6 +37,8 @@ public class CollectorFragment extends Fragment implements ApiListener {
     private TextView cellCount;
     private TextView statusText;
     private TextView caseDisplay;
+    private EditText caseInput;
+    private Button setCaseButton;
     private Button uploadButton;
     private ListView liveList;
     private ArrayAdapter<String> listAdapter;
@@ -51,11 +54,23 @@ public class CollectorFragment extends Fragment implements ApiListener {
         cellCount = view.findViewById(R.id.sc_cell_count);
         statusText = view.findViewById(R.id.sc_status);
         caseDisplay = view.findViewById(R.id.sc_case_display);
+        caseInput = view.findViewById(R.id.sc_case_input);
+        setCaseButton = view.findViewById(R.id.sc_set_case_button);
         uploadButton = view.findViewById(R.id.sc_upload_button);
         liveList = view.findViewById(R.id.sc_live_list);
 
         listAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, networkDisplayList);
         liveList.setAdapter(listAdapter);
+
+        String currentCaseId = prefs.getString(PreferenceKeys.PREF_CASE_ID, "");
+        caseInput.setText(currentCaseId);
+
+        setCaseButton.setOnClickListener(v -> {
+            String newCaseId = caseInput.getText().toString().trim();
+            prefs.edit().putString(PreferenceKeys.PREF_CASE_ID, newCaseId).apply();
+            updateUI();
+            caseInput.clearFocus();
+        });
 
         uploadButton.setOnClickListener(v -> {
             MainActivity m = MainActivity.getMainActivity();

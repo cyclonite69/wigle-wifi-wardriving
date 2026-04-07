@@ -30,6 +30,9 @@ apply plugin: 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 android {
     namespace "net.wigle.wigleandroid"
     compileSdk = 36
+    
+    flavorDimensions "branding"
+
     defaultConfig {
         applicationId "net.wigle.wigleandroid"
         minSdkVersion 24
@@ -45,6 +48,19 @@ android {
           '"' + (project.findProperty('shadowcheck.key') ?: '') + '"'
         buildConfigField "String", "MAPBOX_API_KEY",
           '"' + (project.findProperty('mapbox.key') ?: '') + '"'
+    }
+
+    productFlavors {
+        wigle {
+            dimension "branding"
+            applicationId "net.wigle.wigleandroid"
+        }
+        shadowcheck {
+            dimension "branding"
+            applicationId "net.shadowcheck.collector"
+            versionName "1.0.0-sc"
+            // We can override the API keys here if needed
+        }
     }
     buildFeatures {
         buildConfig = true

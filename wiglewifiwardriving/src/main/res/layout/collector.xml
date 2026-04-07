@@ -47,6 +47,33 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/sc_case_input"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Set Mission/Case ID"
+                android:textColor="#f8fafc"
+                android:textColorHint="#475569"
+                android:backgroundTint="#f59e0b"
+                android:inputType="textCapCharacters"
+                android:maxLines="1" />
+
+            <Button
+                android:id="@+id/sc_set_case_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#334155"
+                android:text="SET"
+                android:textColor="#f59e0b" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:orientation="horizontal">
 
