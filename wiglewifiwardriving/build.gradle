@@ -43,6 +43,8 @@ android {
           '"' + (project.findProperty('shadowcheck.url') ?: '') + '"'
         buildConfigField "String", "SHADOWCHECK_API_KEY",
           '"' + (project.findProperty('shadowcheck.key') ?: '') + '"'
+        buildConfigField "String", "MAPBOX_API_KEY",
+          '"' + (project.findProperty('mapbox.key') ?: '') + '"'
     }
     buildFeatures {
         buildConfig = true

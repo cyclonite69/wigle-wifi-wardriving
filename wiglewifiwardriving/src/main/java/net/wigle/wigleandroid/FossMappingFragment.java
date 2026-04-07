@@ -22,6 +22,7 @@ import androidx.core.app.ActivityCompat;
 import com.goebl.simplify.PointExtractor;
 import com.goebl.simplify.Simplify;
 
+import net.wigle.wigleandroid.BuildConfig;
 import net.wigle.wigleandroid.model.LatLng;
 import net.wigle.wigleandroid.model.Network;
 import net.wigle.wigleandroid.ui.ThemeUtil;
@@ -111,14 +112,21 @@ public class FossMappingFragment extends AbstractMappingFragment {
                     prefs.getString(PREF_FOSS_MAPS_VECTOR_TILE_STYLE, null) : null;
             final String mapTheme = prefs != null ?
                     prefs.getString(PreferenceKeys.PREF_MAP_THEME, "default") : "default";
-            final String mapboxKey = prefs != null ?
+            String mapboxKey = prefs != null ?
                     prefs.getString(PreferenceKeys.PREF_MAPBOX_API_KEY, "") : "";
+            if (mapboxKey.isEmpty() && !BuildConfig.MAPBOX_API_KEY.isEmpty()) {
+                mapboxKey = BuildConfig.MAPBOX_API_KEY;
+            }
 
             String styleUrl;
             if (!mapboxKey.isEmpty() && mapTheme.startsWith("mapbox_")) {
                 String styleId = "streets-v12";
-                if ("mapbox_sat".equals(mapTheme)) styleId = "satellite-v9";
+                if ("mapbox_standard".equals(mapTheme)) styleId = "standard";
+                else if ("mapbox_sat".equals(mapTheme)) styleId = "satellite-v9";
                 else if ("mapbox_dark".equals(mapTheme)) styleId = "dark-v11";
+                else if ("mapbox_light".equals(mapTheme)) styleId = "light-v11";
+                else if ("mapbox_outdoors".equals(mapTheme)) styleId = "outdoors-v12";
+                
                 styleUrl = "https://api.mapbox.com/styles/v1/mapbox/" + styleId + "?access_token=" + mapboxKey;
             } else if (mapServerKey != null && !mapServerKey.isEmpty()) {
                 styleUrl = mapServerUrl + mapServerKey;

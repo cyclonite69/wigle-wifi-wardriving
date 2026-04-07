@@ -38,6 +38,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import net.wigle.wigleandroid.BuildConfig;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
@@ -542,9 +543,10 @@ public final class SettingsFragment extends Fragment implements DialogListener {
             SettingsUtil.doScanSpinner(R.id.gps_spinner, PreferenceKeys.GPS_SCAN_PERIOD,
                     MainActivity.LOCATION_UPDATE_INTERVAL, getString(R.string.setting_tie_wifi), view, c);
 
-            final String[] mapThemes = new String[]{"default", "mapbox_streets", "mapbox_sat", "mapbox_dark"};
-            final String[] mapThemeNames = new String[]{getString(R.string.map_theme_default), getString(R.string.map_theme_mapbox_streets),
-                    getString(R.string.map_theme_mapbox_sat), getString(R.string.map_theme_mapbox_dark)};
+            final String[] mapThemes = new String[]{"default", "mapbox_standard", "mapbox_streets", "mapbox_sat", "mapbox_dark", "mapbox_light", "mapbox_outdoors"};
+            final String[] mapThemeNames = new String[]{getString(R.string.map_theme_default), getString(R.string.map_theme_mapbox_standard),
+                    getString(R.string.map_theme_mapbox_streets), getString(R.string.map_theme_mapbox_sat),
+                    getString(R.string.map_theme_mapbox_dark), getString(R.string.map_theme_mapbox_light), getString(R.string.map_theme_mapbox_outdoors)};
             SettingsUtil.doSpinner(R.id.map_theme_spinner, view, PreferenceKeys.PREF_MAP_THEME, "default", mapThemes, mapThemeNames, c);
 
             final Long[] tPeriods = new Long[]{ 5*60*1000L, 10*60*1000L, 15*60*1000L, 30*60*1000L, 60*60*1000L };
@@ -578,7 +580,11 @@ public final class SettingsFragment extends Fragment implements DialogListener {
             });
 
             final EditText mapboxKey = view.findViewById(R.id.edit_mapbox_api_key);
-            mapboxKey.setText(prefs.getString(PreferenceKeys.PREF_MAPBOX_API_KEY, ""));
+            String currentMapboxKey = prefs.getString(PreferenceKeys.PREF_MAPBOX_API_KEY, "");
+            if (currentMapboxKey.isEmpty() && !BuildConfig.MAPBOX_API_KEY.isEmpty()) {
+                currentMapboxKey = BuildConfig.MAPBOX_API_KEY;
+            }
+            mapboxKey.setText(currentMapboxKey);
             mapboxKey.addTextChangedListener(new SetWatcher() {
                 @Override
                 public void onTextChanged(final String s) {
