@@ -122,10 +122,10 @@ public class FileUtility {
      * @return the string file path
      */
     public static String getSDPath() {
-        if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.Q && context != null) {
-            File external = context.getExternalFilesDir(null);
-            if (external != null) {
-                return safeFilePath(external) + APP_SUB_DIR;
+        if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.Q) {
+            File downloads = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            if (downloads != null) {
+                return safeFilePath(downloads) + APP_SUB_DIR;
             }
         }
         return safeFilePath(Environment.getExternalStorageDirectory()) + APP_SUB_DIR;

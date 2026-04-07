@@ -9,6 +9,7 @@ import static net.wigle.wigleandroid.util.Logging.info;
 import static net.wigle.wigleandroid.listener.GNSSListener.MIN_ROUTE_LOCATION_DIFF_METERS;
 import static net.wigle.wigleandroid.listener.GNSSListener.MIN_ROUTE_LOCATION_DIFF_TIME;
 import static net.wigle.wigleandroid.listener.GNSSListener.MIN_ROUTE_LOCATION_PRECISION_METERS;
+import static net.wigle.wigleandroid.util.FileUtility.APP_SUB_DIR;
 import static net.wigle.wigleandroid.util.FileUtility.SQL_EXT;
 import static net.wigle.wigleandroid.util.FileUtility.hasSD;
 
@@ -459,13 +460,23 @@ public final class DatabaseHelper extends Thread {
 
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q && hasSD) {
             final File internalDbFile = context.getDatabasePath(DATABASE_NAME);
+            final File legacyExternalDbFile = new File(context.getExternalFilesDir(null), APP_SUB_DIR + DATABASE_NAME);
             final File externalDbFile = new File(dbFilename);
-            if (internalDbFile.exists() && !externalDbFile.exists()) {
-                Logging.info("Migrating database from internal to visible external storage: " + dbFilename);
-                try {
-                    FileUtility.copyFile(internalDbFile, externalDbFile);
-                } catch (IOException e) {
-                    Logging.error("Failed to migrate database: " + e);
+            if (!externalDbFile.exists()) {
+                if (legacyExternalDbFile.exists()) {
+                    Logging.info("Migrating database from legacy external to Downloads: " + dbFilename);
+                    try {
+                        FileUtility.copyFile(legacyExternalDbFile, externalDbFile);
+                    } catch (IOException e) {
+                        Logging.error("Failed to migrate legacy external database: " + e);
+                    }
+                } else if (internalDbFile.exists()) {
+                    Logging.info("Migrating database from internal to Downloads: " + dbFilename);
+                    try {
+                        FileUtility.copyFile(internalDbFile, externalDbFile);
+                    } catch (IOException e) {
+                        Logging.error("Failed to migrate internal database: " + e);
+                    }
                 }
             }
         }
