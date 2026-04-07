@@ -54,6 +54,7 @@ public class ShadowCheckUploader extends AbstractProgressApiRequest {
         final File dbFile = dbHelper.getDbFile();
         if (dbFile == null || !dbFile.exists()) {
             Logging.error("DB file not found for ShadowCheck upload");
+            bundle.putString(BackgroundGuiHandler.ERROR, "DB file not found");
             sendBundledMessage( Status.FAIL.ordinal(), bundle );
             return;
         }
@@ -70,6 +71,7 @@ public class ShadowCheckUploader extends AbstractProgressApiRequest {
             }
         } catch (Exception e) {
             Logging.error("Error creating upload request JSON: " + e);
+            bundle.putString(BackgroundGuiHandler.ERROR, "JSON request error: " + e.getMessage());
             sendBundledMessage(Status.FAIL.ordinal(), bundle);
             return;
         }
@@ -86,6 +88,7 @@ public class ShadowCheckUploader extends AbstractProgressApiRequest {
             @Override
             public void onFailure(Call call, IOException e) {
                 Logging.error("ShadowCheck upload request failed: " + e);
+                bundle.putString(BackgroundGuiHandler.ERROR, "Network Failure: " + e.getMessage());
                 sendBundledMessage( Status.FAIL.ordinal(), bundle );
             }
 
@@ -102,10 +105,12 @@ public class ShadowCheckUploader extends AbstractProgressApiRequest {
                         doPutUpload(uploadUrl, s3Key, dbFile, bundle);
                     } catch (Exception e) {
                         Logging.error("Error parsing upload response: " + e);
+                        bundle.putString(BackgroundGuiHandler.ERROR, "JSON Error: " + e.getMessage());
                         sendBundledMessage(Status.FAIL.ordinal(), bundle);
                     }
                 } else {
                     Logging.error("ShadowCheck upload request failed: " + response.code());
+                    bundle.putString(BackgroundGuiHandler.ERROR, "HTTP " + response.code() + ": " + response.message());
                     sendBundledMessage( Status.FAIL.ordinal(), bundle );
                 }
                 response.close();
@@ -133,6 +138,7 @@ public class ShadowCheckUploader extends AbstractProgressApiRequest {
             @Override
             public void onFailure(Call call, IOException e) {
                 Logging.error("ShadowCheck S3 PUT failed: " + e);
+                bundle.putString(BackgroundGuiHandler.ERROR, "S3 PUT Failure: " + e.getMessage());
                 sendBundledMessage( Status.FAIL.ordinal(), bundle );
             }
 
@@ -145,6 +151,7 @@ public class ShadowCheckUploader extends AbstractProgressApiRequest {
                     sendBundledMessage( Status.SUCCESS.ordinal(), bundle );
                 } else {
                     Logging.error("ShadowCheck S3 PUT failed: " + response.code());
+                    bundle.putString(BackgroundGuiHandler.ERROR, "S3 HTTP " + response.code() + ": " + response.message());
                     sendBundledMessage( Status.FAIL.ordinal(), bundle );
                 }
                 response.close();
