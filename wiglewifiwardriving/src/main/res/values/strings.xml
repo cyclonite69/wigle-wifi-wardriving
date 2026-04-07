@@ -372,6 +372,7 @@
     <string name="map_theme_mapbox_light">Mapbox Light</string>
     <string name="map_theme_mapbox_standard">Mapbox Standard</string>
     <string name="map_theme_mapbox_outdoors">Mapbox Outdoors</string>
+    <string name="map_theme_mapbox_dark_earth">Mapbox Dark Earth</string>
     <string name="sc_status_active">SC COLLECTOR ACTIVE</string>
     <string name="sc_status_paused">SC COLLECTOR PAUSED</string>
     <string name="sc_nets_wifi">WiFi: %1$d</string>

@@ -56,6 +56,7 @@ import android.database.sqlite.SQLiteStatement;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Process;
@@ -461,17 +462,25 @@ public final class DatabaseHelper extends Thread {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q && hasSD) {
             final File internalDbFile = context.getDatabasePath(DATABASE_NAME);
             final File legacyExternalDbFile = new File(context.getExternalFilesDir(null), APP_SUB_DIR + DATABASE_NAME);
+            final File downloadsDbFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), APP_SUB_DIR + DATABASE_NAME);
             final File externalDbFile = new File(dbFilename);
             if (!externalDbFile.exists()) {
-                if (legacyExternalDbFile.exists()) {
-                    Logging.info("Migrating database from legacy external to Downloads: " + dbFilename);
+                if (downloadsDbFile.exists()) {
+                    Logging.info("Migrating database from Downloads to repos: " + dbFilename);
+                    try {
+                        FileUtility.copyFile(downloadsDbFile, externalDbFile);
+                    } catch (IOException e) {
+                        Logging.error("Failed to migrate Downloads database: " + e);
+                    }
+                } else if (legacyExternalDbFile.exists()) {
+                    Logging.info("Migrating database from legacy external to repos: " + dbFilename);
                     try {
                         FileUtility.copyFile(legacyExternalDbFile, externalDbFile);
                     } catch (IOException e) {
                         Logging.error("Failed to migrate legacy external database: " + e);
                     }
                 } else if (internalDbFile.exists()) {
-                    Logging.info("Migrating database from internal to Downloads: " + dbFilename);
+                    Logging.info("Migrating database from internal to repos: " + dbFilename);
                     try {
                         FileUtility.copyFile(internalDbFile, externalDbFile);
                     } catch (IOException e) {

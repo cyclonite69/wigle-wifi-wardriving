@@ -126,6 +126,7 @@ public class FossMappingFragment extends AbstractMappingFragment {
                 else if ("mapbox_dark".equals(mapTheme)) styleId = "dark-v11";
                 else if ("mapbox_light".equals(mapTheme)) styleId = "light-v11";
                 else if ("mapbox_outdoors".equals(mapTheme)) styleId = "outdoors-v12";
+                else if ("mapbox_dark_earth".equals(mapTheme)) styleId = "satellite-streets-v12";
                 
                 styleUrl = "https://api.mapbox.com/styles/v1/mapbox/" + styleId + "?access_token=" + mapboxKey;
             } else if (mapServerKey != null && !mapServerKey.isEmpty()) {

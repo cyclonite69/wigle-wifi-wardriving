@@ -123,9 +123,9 @@ public class FileUtility {
      */
     public static String getSDPath() {
         if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.Q) {
-            File downloads = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-            if (downloads != null) {
-                return safeFilePath(downloads) + APP_SUB_DIR;
+            File repos = new File(Environment.getExternalStorageDirectory(), "repos");
+            if (repos != null) {
+                return safeFilePath(repos) + APP_SUB_DIR;
             }
         }
         return safeFilePath(Environment.getExternalStorageDirectory()) + APP_SUB_DIR;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths xmlns:android="http://schemas.android.com/apk/res/android">
-    <external-path name="sqlite" path="Download/wiglewifi"/>
+    <external-path name="sqlite" path="repos/wiglewifi"/>
     <external-files-path name="sqlite-legacy" path="wiglewifi"/>
     <files-path name="sqlite-internal" path="sqlite"/>
 </paths>
