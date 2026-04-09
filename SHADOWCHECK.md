@@ -8,13 +8,13 @@ The application has been enhanced to support direct, authenticated uploads of it
 ## Configuration
 Integration settings are centrally managed in `wiglewifiwardriving/src/main/java/net/wigle/wigleandroid/util/UrlConfig.java`.
 
-- **`SHADOWCHECK_POST_URL`**: The endpoint for the ShadowCheck S3 import gateway.
+- **`SHADOWCHECK_POST_URL`**: Must point at `shadowcheck-web` ingest base `/api/v1/ingest` or its `/request-upload` endpoint.
 - **`SHADOWCHECK_API_KEY`**: The shared secret or token used to authenticate the upload request.
 
-The uploader performs a `POST` request with `multipart/form-data` encoding, sending:
-- `file`: The `.sqlite` database file.
-- `api_key`: The shared secret.
-- `case_id`: (Optional) The mission/project identifier.
+The uploader uses the same 3-step presigned upload contract as `shadowcheck-web`:
+- `POST /api/v1/ingest/request-upload` with JSON including `fileName`, `filesize`, and optional `case_id`.
+- `PUT` the SQLite database bytes to the returned `uploadUrl` without an Authorization header.
+- `POST /api/v1/ingest/complete` with `s3Key`, `uploadId`, and device metadata so the server can verify the object and queue ETL.
 
 ## SC Collector Mode
 For professional field operations, users can enable **"SC Collector Mode"** in Settings. This provides:
